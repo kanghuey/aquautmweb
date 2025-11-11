@@ -7,6 +7,11 @@ sidebarToggle.addEventListener("click", () => {
 
 document.querySelectorAll(".menu-link").forEach(link => {
     link.addEventListener("click", e => {
+        // Allow form submission for logout button
+        if (link.tagName === 'BUTTON' && link.form && link.form.action.includes('/logout')) {
+            return; // Let the form submit
+        }
+
         e.preventDefault();
 
         document.querySelectorAll(".menu-link").forEach(l => l.classList.remove("active"));

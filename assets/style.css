@@ -116,6 +116,26 @@ input {
     box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1);
 }
 
+.password-container {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.password-container input {
+    width: 100%;
+    padding-right: 40px; /* Space for the eye icon */
+}
+
+.eye-icon {
+    position: absolute;
+    right: 10px;
+    cursor: pointer;
+    font-size: 18px;
+    color: #666;
+    user-select: none;
+}
+
 .required {
     color: red;
 }
@@ -140,6 +160,10 @@ button:hover {
     text-align: center;
     margin-top: 15px;
     font-size: 14px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
 }
 
 .login-link a {
@@ -316,9 +340,14 @@ button:hover {
     transition: 0.4s ease;
 }
 
-.sidebar-menu .menu-link:hover{
-    background: rgba(255, 255, 255, 0.9);
-    color: #1E3748;
+.sidebar-menu .menu-link:hover {
+    background: rgba(255, 255, 255, 0.9) !important;
+    color: #1E3748 !important;
+}
+
+.sidebar-menu .menu-link:hover button {
+    background: rgba(255, 255, 255, 0.9) !important;
+    color: #1E3748 !important;
 }
 
 .sidebar-menu .menu-link .menu-label {
