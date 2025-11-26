@@ -855,7 +855,7 @@ select:focus {
 
 .announce-body {
     width: 98%;
-    height: 170px;
+    height: 150px;
     padding: 12px;
     border: 2px solid #d0d8e5;
     border-radius: 6px;
@@ -863,11 +863,16 @@ select:focus {
     font-size: 15px;
 }
 
-.emergency-row {
+.announce-date {
+    font-size: 13px;
+    color: #888;
+}
+
+.small-title {
     display: flex;
     align-items: center;
     gap: 10px;
-    margin: 20px 0;
+    margin: 10px 0;
 }
 
 .tooltip-wrapper {
