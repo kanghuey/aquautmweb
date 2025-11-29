@@ -80,10 +80,28 @@
 
         <section class="section" id="announcements">
             <h1>Manage Announcements</h1>
-            <div class="card">
-                <h3>Placeholder</h3>
-                <p>Placeholder</p>
-            </div>
+            <form action="/announcements/create" method="POST">
+    <label>Title*</label>
+    <input type="text" class="form-control" name="title" required>
+
+    <label>Content*</label>
+    <textarea class="form-control" name="content" rows="4" required></textarea>
+
+    <label>Link</label>
+    <input type="text" class="form-control" name="link">
+
+    <label>Image</label>
+    <input type="text" class="form-control" name="image_path">  
+
+    <button type="submit">Add Announcement</button>
+
+    
+    
+</form>
+          <h3>Existing Announcements</h3>
+          <div id="announcements-list"></div>
+
+
         </section>
 
         <section class="section" id="schedule">
@@ -123,6 +141,8 @@
     <script src="/assets/calendar.js"></script>
     <script src="/assets/sidebar.js"></script>
     <script src="/assets/profile.js"></script>
+    <script src="/assets/announcements.js"></script>
+
 </body>
 
 </html>
