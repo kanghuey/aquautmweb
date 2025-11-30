@@ -1,6 +1,3 @@
-
-
-
 require('dotenv').config();
 
 const express = require("express");
@@ -24,11 +21,8 @@ app.use(express.static(path.join(__dirname, "")));
 const pagesRouter = require("./routes/pages");
 const authRouter = require("./routes/auth");
 const profileRoutes = require("./routes/profile");
-const announcementRoutes = require("./routes/announcements");
 
 
-
-app.use(announcementRoutes);
 app.use("/", profileRoutes);
 app.use("/", pagesRouter);
 app.use("/", authRouter);
