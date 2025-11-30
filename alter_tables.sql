@@ -40,3 +40,7 @@ CREATE TABLE announcements (
   FOREIGN KEY (created_by) REFERENCES users(id)
 );
 
+
+ALTER TABLE announcements 
+ADD COLUMN target_role ENUM('member', 'athlete', 'all') NOT NULL DEFAULT 'all';
+
