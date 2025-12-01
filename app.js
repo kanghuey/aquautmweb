@@ -73,6 +73,48 @@ app.get('/api/events', isAuthenticated, async (req, res) => {
   }
 });
 
+app.get('/api/dashboard/upcoming', isAuthenticated, async (req, res) => {
+  const userRole = req.session.user.role;
+
+  try {
+      const query = `
+          SELECT title, start_date, end_date 
+          FROM schedules 
+          WHERE (target_role = ? OR target_role = 'all')
+          AND start_date BETWEEN NOW() AND DATE_ADD(NOW(), INTERVAL 7 DAY)
+          ORDER BY start_date ASC
+          LIMIT 5
+      `;
+
+      const [events] = await db.promise().query(query, [userRole]);
+      res.json(events);
+  } catch (err) {
+      console.error("Dashboard Events Error:", err);
+      res.status(500).json({ error: "Database error" });
+  }
+});
+
+app.get('/api/dashboard/announcement', isAuthenticated, async (req, res) => {
+  const userRole = req.session.user.role;
+
+  try {
+      const query = `
+          SELECT title, content, created_at 
+          FROM announcements 
+          WHERE (target_role = ? OR target_role = 'all')
+          ORDER BY created_at DESC 
+          LIMIT 1
+      `;
+
+      const [announcements] = await db.promise().query(query, [userRole]);
+      
+      res.json(announcements.length > 0 ? announcements[0] : null);
+  } catch (err) {
+      console.error("Dashboard Announcement Error:", err);
+      res.status(500).json({ error: "Database error" });
+  }
+});
+
 // Routes
 const pagesRouter = require("./routes/pages");
 const authRouter = require("./routes/auth");

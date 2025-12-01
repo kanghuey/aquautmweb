@@ -722,6 +722,10 @@ select:focus {
     gap: 20px;
 }
 
+#dashboard .card-grid {
+    grid-template-columns: 1fr; 
+}
+
 .form-control {
     width: 100%;
     padding: 10px;
