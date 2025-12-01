@@ -1,55 +1,61 @@
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', function () {
 
-  var calendarEl = document.getElementById('calendar');
-  
-  var calendar = new FullCalendar.Calendar(calendarEl, {
-      initialView: 'dayGridMonth',
+    var calendarEl = document.getElementById('calendar');
 
-      events: '/api/events',
+    var calendar = new FullCalendar.Calendar(calendarEl, {
+        initialView: 'dayGridMonth',
 
-      headerToolbar: {
-          left: 'prev,next today',
-          center: 'title',
-          right: 'dayGridMonth,listMonth'
-      },
-      
-      eventDidMount: function(info) {
-      }
-  });
+        events: '/api/events',
 
-  calendar.render();
-  window.calendar = calendar;
+        headerToolbar: {
+            left: 'prev,next today',
+            center: 'title',
+            right: 'dayGridMonth,listMonth'
+        },
 
-  const eventForm = document.getElementById('event-form');
+        eventTimeFormat: {
+            hour: 'numeric',
+            minute: '2-digit',
+            meridiem: 'short'
+        },
 
-  if (eventForm) {
-      eventForm.addEventListener('submit', function(e) {
-          e.preventDefault(); 
-          const formData = new FormData(eventForm);
-          const data = Object.fromEntries(formData.entries());
+        eventDidMount: function (info) {
+        }
+    });
 
-          fetch('/api/events', {
-              method: 'POST',
-              headers: {
-                  'Content-Type': 'application/json'
-              },
-              credentials: 'include', 
-              body: JSON.stringify(data)
-          })
-          .then(response => response.json())
-          .then(result => {
-              if (result.success) {
-                  alert('Event added successfully!');
-                  eventForm.reset();
-                  window.calendar.refetchEvents();
-              } else {
-                  alert('Error: ' + result.message);
-              }
-          })
-          .catch(error => {
-              console.error('Error:', error);
-              alert('Something went wrong contacting the server.');
-          });
-      });
-  }
+    calendar.render();
+    window.calendar = calendar;
+
+    const eventForm = document.getElementById('event-form');
+
+    if (eventForm) {
+        eventForm.addEventListener('submit', function (e) {
+            e.preventDefault();
+            const formData = new FormData(eventForm);
+            const data = Object.fromEntries(formData.entries());
+
+            fetch('/api/events', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                credentials: 'include',
+                body: JSON.stringify(data)
+            })
+                .then(response => response.json())
+                .then(result => {
+                    if (result.success) {
+                        alert('Event added successfully!');
+                        eventForm.reset();
+                        window.calendar.refetchEvents();
+                    } else {
+                        alert('Error: ' + result.message);
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert('Something went wrong contacting the server.');
+                });
+        });
+    }
 });
