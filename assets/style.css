@@ -934,3 +934,73 @@ input:checked + .slider:before {
   transform: translateX(22px);
 }
 
+.dashboard-subtitle {
+    margin-bottom: 1.5rem;
+    color: #6e7c88;
+}
+
+/* Stats grid */
+.dashboard-stats-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 1.5rem;
+}
+
+/* Stat cards */
+.stats-card {
+    padding: 1.5rem 1.8rem;
+    background: #ffffff;
+    border-left: 6px solid #1E3748;
+    border-radius: 10px;
+    box-shadow: 0px 4px 10px rgba(0,0,0,0.08);
+    transition: 0.2s ease;
+}
+
+.stats-card:hover {
+    transform: translateY(-3px);
+}
+
+.stats-label {
+    font-size: 0.95rem;
+    color: #1E3748;
+    font-weight: 600;
+}
+
+.stats-value {
+    margin-top: 8px;
+    font-size: 2rem;
+    font-weight: 700;
+    color: #1E3748;
+}
+
+/* Chart card */
+.chart-card {
+    margin-top: 2rem;
+    padding: 1.5rem;
+    border-radius: 12px;
+}
+
+/* Recent activity */
+.recent-card {
+    margin-top: 2rem;
+    padding: 1.5rem;
+    border-radius: 12px;
+}
+
+.recent-list {
+    margin-top: 10px;
+    padding: 0;
+    list-style: none;
+}
+
+.recent-list li {
+    padding: 0.75rem 0;
+    border-bottom: 1px solid #ddd;
+    font-size: 0.95rem;
+    color: #404b56;
+}
+
+.recent-list li:last-child {
+    border-bottom: none;
+}
+

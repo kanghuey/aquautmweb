@@ -65,49 +65,74 @@
     <main class="main-content">
         <section class="section active" id="dashboard">
             <h1>Welcome to AquaUTM, <span id="dynamic-user-name">User</span>!</h1>
-            <p>Your personalized space for announcements, schedules, and club management.</p>
-            <div class="card-grid">
-                <div class="card">
-                    <h3>Placeholder</h3>
-                    <p>Placeholder</p>
+            <p class="dashboard-subtitle">Here’s AquaUTM system overview.</p>
+
+            <div class="dashboard-stats-grid">
+                <div class="stats-card">
+                    <div class="stats-label">Total Users</div>
+                    <div class="stats-value" id="stats-total-users">0</div>
                 </div>
-                <div class="card">
-                    <h3>Placeholder</h3>
-                    <p>Placeholder</p>
+
+                <div class="stats-card">
+                    <div class="stats-label">Active Today</div>
+                    <div class="stats-value" id="stats-active-today">0</div>
+                </div>
+
+                <div class="stats-card">
+                    <div class="stats-label">New This Month</div>
+                    <div class="stats-value" id="stats-new-month">0</div>
+                </div>
+
+                <div class="stats-card">
+                    <div class="stats-label">Announcements</div>
+                    <div class="stats-value" id="stats-announcements">0</div>
                 </div>
             </div>
+
+            <div class="card chart-card">
+                <h3>User Activity (Last 7 Days)</h3>
+                <canvas id="user-activity-chart" height="140"></canvas>
+            </div>
+
+            <div class="card recent-card">
+                <h3>Recent System Activity</h3>
+                <ul id="recent-logs" class="recent-list">
+                    <li>Loading activity...</li>
+                </ul>
+            </div>
+
         </section>
 
         <section class="section" id="announcements">
 
             <h1>Manage Announcements</h1>
             <form action="/announcements/create" method="POST">
-  <label>Title*</label>
-  <input type="text" class="form-control" name="title" required>
+                <label>Title*</label>
+                <input type="text" class="form-control" name="title" required>
 
-  <label>Content*</label>
-  <textarea class="form-control" name="content" rows="4" required></textarea>
+                <label>Content*</label>
+                <textarea class="form-control" name="content" rows="4" required></textarea>
 
-  <label>Link</label>
-  <input type="text" class="form-control" name="link">
+                <label>Link</label>
+                <input type="text" class="form-control" name="link">
 
-  <label>Image (URL)</label>
-  <input type="text" class="form-control" name="image_path">
-  
-  <label>Target Audience*</label>
-    <select name="target_role" class="form-control" required>
-        <option value="all">all</option>
-        <option value="member">members</option>
-        <option value="athlete">athlete</option>
-    </select>
-  
+                <label>Image (URL)</label>
+                <input type="text" class="form-control" name="image_path">
 
-  <button type="submit">Add Announcement</button>
-</form>
-<h3>Existing Announcements</h3>
-<div id="announcements-list"></div>
+                <label>Target Audience*</label>
+                <select name="target_role" class="form-control" required>
+                    <option value="all">all</option>
+                    <option value="member">members</option>
+                    <option value="athlete">athlete</option>
+                </select>
 
-</section>
+
+                <button type="submit">Add Announcement</button>
+            </form>
+            <h3>Existing Announcements</h3>
+            <div id="announcements-list"></div>
+
+        </section>
 
         <section class="section" id="schedule">
             <h1>Manage Schedules</h1>
@@ -136,7 +161,7 @@
             </div>
         </section>
 
-         <!--profile page-->
+        <!--profile page-->
         <section class="section" id="profile">
             <h1>Profile</h1>
 
@@ -220,6 +245,8 @@
     </main>
 
     <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.19/index.global.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="/assets/dashboard.js"></script>
     <script src="/assets/calendar.js"></script>
     <script src="/assets/sidebar.js"></script>
     <script src="/assets/profile.js"></script>
