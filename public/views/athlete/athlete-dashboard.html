@@ -64,7 +64,7 @@
     <main class="main-content">
         <section class="section active" id="dashboard">
             <h1>Welcome to AquaUTM, <span id="dynamic-user-name">User</span>!</h1>
-            <p>Your personalized space for announcements, schedules, and club management.</p>
+            <p class="dashboard-subtitle">Your personalized space for club announcements and schedules.</p><br>
             <div class="card-grid">
                 <div class="card">
                     <h3>Upcoming Events</h3>
@@ -83,17 +83,20 @@
 
         <section class="section" id="announcements">
             <h1>Announcements</h1>
+            <p class="dashboard-subtitle">Latest news and announcements.</p>
             <div id="announcements-list"></div>
         </section>
 
         <section class="section" id="schedule">
             <h1>Training Schedule and Event Viewer</h1>
+            <p class="dashboard-subtitle">Check the upcoming events.</p>
             <div id="calendar"></div>
         </section>
 
          <!--profile page-->
         <section class="section" id="profile">
             <h1>Profile</h1>
+            <p class="dashboard-subtitle">Edit your profile information.</p><br>
 
             <div class="profile-grid">
                 <div class="card profile-left">
@@ -121,14 +124,24 @@
 
                     <!-- data will be fetched from db check profile.js in assets for working-->
                     <div id="profile-card"></div>
-                    <!-- how to make this data align left? -->
 
-                    <div class="twofa-toggle-container mt-3 d-flex align-items-center justify-content-between">
-                        <span>Two-Factor Authentication</span>
-                        <label class="switch">
-                            <input type="checkbox" id="twofa-toggle">
-                            <span class="slider round"></span>
-                        </label>
+                    <div class="profile-settings-group">
+    
+                        <div class="setting-row">
+                            <span class="setting-label">Two-Factor Authentication</span>
+                            <label class="switch">
+                                <input type="checkbox" id="twofa-toggle">
+                                <span class="slider round"></span>
+                            </label>
+                        </div>
+                    
+                        <div class="setting-row">
+                            <span class="setting-label">Notifications</span>
+                            <label class="switch">
+                                <input type="checkbox" id="notifications-toggle">
+                                <span class="slider round"></span>
+                            </label>
+                        </div>
                     </div>
                 </div>
 
