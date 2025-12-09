@@ -115,6 +115,17 @@ app.get('/api/dashboard/announcement', isAuthenticated, async (req, res) => {
   }
 });
 
+app.get('/me', (req, res) => {
+  if (req.session.user) {
+    res.json({ 
+      name: req.session.user.first_name, 
+      role: req.session.user.role 
+    });
+  } else {
+    res.status(401).json({ error: "Not logged in" });
+  }
+});
+
 // Routes
 const pagesRouter = require("./routes/pages");
 const authRouter = require("./routes/auth");

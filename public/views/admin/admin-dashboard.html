@@ -40,6 +40,12 @@
                         <span class="menu-label">Schedule</span>
                     </a>
                 </li>
+                <li class="menu-item">
+                    <a href="#" class="menu-link">
+                        <span class="menu-icon material-symbols-rounded">group</span>
+                        <span class="menu-label">Members</span>
+                    </a>
+                </li>
             </ul>
 
             <ul class="menu-list secondary-menu">
@@ -65,7 +71,7 @@
     <main class="main-content">
         <section class="section active" id="dashboard">
             <h1>Welcome to AquaUTM, <span id="dynamic-user-name">User</span>!</h1>
-            <p class="dashboard-subtitle">Here’s AquaUTM system overview.</p>
+            <p class="dashboard-subtitle">Here is AquaUTM's system overview.</p>
 
             <div class="dashboard-stats-grid">
                 <div class="stats-card">
@@ -158,6 +164,68 @@
 
                     <button type="submit">Add Event</button>
                 </form>
+            </div>
+        </section>
+
+        <section class="section" id="members">
+            <h1>Manage Members</h1>
+            <p class="dashboard-subtitle">View, edit, and manage users.</p>
+        
+            <div class="card">
+                <div class="members-toolbar">
+                    <div class="search-box">
+                        <span class="material-symbols-rounded search-icon">search</span>
+                        <input type="text" id="member-search" class="form-control" placeholder="Search by name or email...">
+                    </div>
+                    <div class="filter-box">
+                        <select id="role-filter" class="form-control">
+                            <option value="all">All Roles</option>
+                            <option value="admin">Admin</option>
+                            <option value="athlete">Athlete</option>
+                            <option value="member">Member</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+        
+            <div class="card table-card">
+                <div class="table-responsive">
+                    <table class="members-table">
+                        <thead>
+                            <tr>
+                                <th>User</th>
+                                <th>Email</th>
+                                <th>Role</th>
+                                <th>Status</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="members-list"> 
+                            <!-- backend data fetching here -->
+                            <tr>
+                                <td>
+                                    <div class="user-info">
+                                        <img src="/images/default-profile.png" alt="User" class="table-avatar">
+                                        <span class="user-name">Username here</span>
+                                    </div>
+                                </td>
+                                <td>Email here</td>
+                                <td><span class="role-badge role-athlete">Role here</span></td>
+                                <td><span class="status-dot active"></span> Active state here</td>
+                                <td>
+                                    <div class="action-buttons">
+                                        <button class="btn-icon edit" title="Edit Role">
+                                            <span class="material-symbols-rounded">edit</span>
+                                        </button>
+                                        <button class="btn-icon delete" title="Remove User">
+                                            <span class="material-symbols-rounded">delete</span>
+                                        </button>
+                                    </div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
             </div>
         </section>
 
