@@ -169,11 +169,28 @@
                     <input type="datetime-local" class="form-control" name="end_date" id="event_end">
 
                     <label>Event Type</label>
+                    <select class="form-control" name="type" id="event_type" required>
+                        <option value="event">Event</option>
+                        <option value="class">Class</option>
+                    </select>
+
+                    <label>Target Audience</label>
                     <select class="form-control" name="event_role" id="event_role" required>
                         <option value="all">All Users</option>
                         <option value="athlete">Athletes</option>
                         <option value="member">Members</option>
                     </select>
+
+                    <div id="class-fields" style="display: none;">
+                        <label>Instructor</label>
+                        <input type="text" class="form-control" name="instructor" id="event_instructor">
+
+                        <label>Location</label>
+                        <input type="text" class="form-control" name="location" id="event_location">
+
+                        <label>Description</label>
+                        <textarea class="form-control" name="description" id="event_description" rows="3"></textarea>
+                    </div>
 
                     <div class="modal-footer" id="form-actions">
                         <button type="submit" id="save-event-btn">Add Event</button>

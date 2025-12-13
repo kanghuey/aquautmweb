@@ -10,3 +10,10 @@ ADD COLUMN notifications_enabled BOOLEAN DEFAULT TRUE AFTER profile_pic;
 UPDATE users SET role = 'member' WHERE role IS NULL OR role = '';
 UPDATE users SET profile_pic = '/images/default-profile.png' WHERE profile_pic IS NULL OR profile_pic = '';
 UPDATE users SET notifications_enabled = TRUE WHERE notifications_enabled IS NULL;
+
+-- Add class-specific columns to schedules table
+ALTER TABLE schedules
+ADD COLUMN type ENUM('event', 'class') DEFAULT 'event',
+ADD COLUMN instructor VARCHAR(255),
+ADD COLUMN location VARCHAR(255),
+ADD COLUMN description TEXT;

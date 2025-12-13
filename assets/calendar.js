@@ -17,6 +17,11 @@ document.addEventListener('DOMContentLoaded', function () {
     const startInput = document.getElementById('event_start');
     const endInput = document.getElementById('event_end');
     const roleInput = document.getElementById('event_role');
+    const typeInput = document.getElementById('event_type');
+    const instructorInput = document.getElementById('event_instructor');
+    const locationInput = document.getElementById('event_location');
+    const descriptionInput = document.getElementById('event_description');
+    const classFields = document.getElementById('class-fields');
 
     const saveBtn = document.getElementById('save-event-btn');
     const cancelBtn = document.getElementById('cancel-edit-btn');
@@ -24,6 +29,17 @@ document.addEventListener('DOMContentLoaded', function () {
     const modalDeleteBtn = document.getElementById('modal-delete-btn');
     const modalTitle = document.getElementById('modal-event-title');
     const modalInfo = document.getElementById('modal-event-info');
+
+    // Toggle class fields based on type selection
+    if (typeInput) {
+        typeInput.addEventListener('change', function() {
+            if (this.value === 'class') {
+                classFields.style.display = 'block';
+            } else {
+                classFields.style.display = 'none';
+            }
+        });
+    }
 
     const toLocalISOString = (date) => {
         if (!date) return '';
@@ -57,7 +73,21 @@ document.addEventListener('DOMContentLoaded', function () {
 
             modalTitle.innerText = info.event.title;
             const timeText = info.event.start ? info.event.start.toLocaleDateString() + ' ' + info.event.start.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) : 'All Day';
-            modalInfo.innerText = `Time: ${timeText}`;
+            let infoText = `Time: ${timeText}`;
+
+            if (info.event.extendedProps && info.event.extendedProps.type === 'class') {
+                if (info.event.extendedProps.instructor) {
+                    infoText += `\nInstructor: ${info.event.extendedProps.instructor}`;
+                }
+                if (info.event.extendedProps.location) {
+                    infoText += `\nLocation: ${info.event.extendedProps.location}`;
+                }
+                if (info.event.extendedProps.description) {
+                    infoText += `\nDescription: ${info.event.extendedProps.description}`;
+                }
+            }
+
+            modalInfo.innerText = infoText;
 
             modal.classList.add('active');
 
@@ -91,6 +121,21 @@ document.addEventListener('DOMContentLoaded', function () {
                     roleInput.value = info.event.extendedProps.role;
                 }
 
+                if (info.event.extendedProps && info.event.extendedProps.type) {
+                    typeInput.value = info.event.extendedProps.type;
+                    if (info.event.extendedProps.type === 'class') {
+                        classFields.style.display = 'block';
+                        instructorInput.value = info.event.extendedProps.instructor || '';
+                        locationInput.value = info.event.extendedProps.location || '';
+                        descriptionInput.value = info.event.extendedProps.description || '';
+                    } else {
+                        classFields.style.display = 'none';
+                    }
+                } else {
+                    typeInput.value = 'event';
+                    classFields.style.display = 'none';
+                }
+
                 saveBtn.innerText = "Update Event";
                 cancelBtn.style.display = "inline-block";
 
@@ -106,6 +151,9 @@ document.addEventListener('DOMContentLoaded', function () {
 
             // Set the start date to the clicked date at 00:00
             startInput.value = info.dateStr + 'T00:00';
+
+            // Hide class fields by default
+            classFields.style.display = 'none';
 
             // Scroll to the form
             form.scrollIntoView({ behavior: 'smooth' });
@@ -131,6 +179,7 @@ document.addEventListener('DOMContentLoaded', function () {
         cancelBtn.addEventListener('click', function () {
             form.reset();
             idInput.value = '';
+            classFields.style.display = 'none';
             saveBtn.innerText = "Add Event";
             cancelBtn.style.display = "none";
         });

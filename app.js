@@ -31,28 +31,76 @@ function isAuthenticated(req, res, next) {
   return res.status(401).json({ error: 'Please log in to view events' });
 }
 
+app.get('/api/events/:id', isAuthenticated, async (req, res) => {
+  const userRole = req.session.user.role;
+  const { id } = req.params;
+
+  let query = '';
+  let params = [];
+
+  if (userRole === 'admin') {
+    query = 'SELECT id, title, start_date as start, end_date as end, target_role as role, type, instructor, location, description FROM schedules WHERE id = ?';
+    params = [id];
+  } else {
+    query = 'SELECT id, title, start_date as start, end_date as end, target_role as role, type, instructor, location, description FROM schedules WHERE id = ? AND (target_role = ? OR target_role = "all")';
+    params = [id, userRole];
+  }
+
+  try {
+    const [results] = await db.promise().query(query, params);
+
+    if (results.length === 0) {
+      return res.status(404).json({ error: 'Event not found or access denied' });
+    }
+
+    const event = results[0];
+    const formattedEvent = {
+      id: event.id,
+      title: event.title,
+      start: event.start,
+      end: event.end,
+      extendedProps: {
+        role: event.role,
+        type: event.type,
+        instructor: event.instructor,
+        location: event.location,
+        description: event.description
+      }
+    };
+
+    res.json(formattedEvent);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: 'Database error' });
+  }
+});
+
 app.get('/api/events', isAuthenticated, async (req, res) => {
   const userRole = req.session.user.role;
   let query = '';
   let params = [];
 
   if (userRole === 'admin') {
-    query = 'SELECT id, title, start_date as start, end_date as end, target_role as role FROM schedules';
+    query = 'SELECT id, title, start_date as start, end_date as end, target_role as role, type, instructor, location, description FROM schedules';
   } else {
-    query = 'SELECT id, title, start_date as start, end_date as end, target_role as role FROM schedules WHERE target_role = ? OR target_role = "all"';
+    query = 'SELECT id, title, start_date as start, end_date as end, target_role as role, type, instructor, location, description FROM schedules WHERE target_role = ? OR target_role = "all"';
     params = [userRole];
   }
 
   try {
     const [results] = await db.promise().query(query, params);
-    
+
     const events = results.map(event => ({
         id: event.id,
         title: event.title,
         start: event.start,
         end: event.end,
         extendedProps: {
-            role: event.role
+            role: event.role,
+            type: event.type,
+            instructor: event.instructor,
+            location: event.location,
+            description: event.description
         }
     }));
 
@@ -68,12 +116,12 @@ app.post('/api/events', isAuthenticated, async (req, res) => {
     return res.status(403).json({ error: 'Unauthorized' });
   }
 
-  const { title, start_date, end_date, event_role } = req.body;
+  const { title, start_date, end_date, event_role, type, instructor, location, description } = req.body;
   const finalEndDate = end_date ? end_date : null;
 
   try {
-    const query = 'INSERT INTO schedules (title, start_date, end_date, target_role) VALUES (?, ?, ?, ?)';
-    const [result] = await db.promise().query(query, [title, start_date, finalEndDate, event_role]);
+    const query = 'INSERT INTO schedules (title, start_date, end_date, target_role, type, instructor, location, description) VALUES (?, ?, ?, ?, ?, ?, ?, ?)';
+    const [result] = await db.promise().query(query, [title, start_date, finalEndDate, event_role, type || 'event', instructor, location, description]);
     res.json({ success: true, id: result.insertId, message: 'Event added successfully' });
   } catch (err) {
     console.error(err);
@@ -82,47 +130,48 @@ app.post('/api/events', isAuthenticated, async (req, res) => {
 });
 
 app.put('/api/events/:id', isAuthenticated, async (req, res) => {
-    if (req.session.user.role !== 'admin') {
-        return res.status(403).json({ error: 'Unauthorized' });
-    }
+  if (req.session.user.role !== 'admin') {
+    return res.status(403).json({ error: 'Unauthorized' });
+  }
 
-    const { id } = req.params;
-    const { title, start_date, end_date, event_role } = req.body;
-    const finalEndDate = end_date ? end_date : null;
+  const { id } = req.params;
+  const { title, start_date, end_date, event_role, type, instructor, location, description } = req.body;
+  const finalEndDate = end_date ? end_date : null;
 
-    try {
-        const query = 'UPDATE schedules SET title = ?, start_date = ?, end_date = ?, target_role = ? WHERE id = ?';
-        await db.promise().query(query, [title, start_date, finalEndDate, event_role, id]);
-        res.json({ success: true, message: 'Event updated successfully' });
-    } catch (err) {
-        console.error(err);
-        res.status(500).json({ error: 'Database error' });
-    }
+  try {
+    const query = 'UPDATE schedules SET title = ?, start_date = ?, end_date = ?, target_role = ?, type = ?, instructor = ?, location = ?, description = ? WHERE id = ?';
+    await db.promise().query(query, [title, start_date, finalEndDate, event_role, type || 'event', instructor, location, description, id]);
+    res.json({ success: true, message: 'Event updated successfully' });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: 'Database error' });
+  }
 });
 
 app.delete('/api/events/:id', isAuthenticated, async (req, res) => {
-    if (req.session.user.role !== 'admin') {
-        return res.status(403).json({ error: 'Unauthorized' });
-    }
+  if (req.session.user.role !== 'admin') {
+    return res.status(403).json({ error: 'Unauthorized' });
+  }
 
-    const { id } = req.params;
+  const { id } = req.params;
 
-    try {
-        const query = 'DELETE FROM schedules WHERE id = ?';
-        await db.promise().query(query, [id]);
-        res.json({ success: true, message: 'Event deleted successfully' });
-    } catch (err) {
-        console.error(err);
-        res.status(500).json({ error: 'Database error' });
-    }
+  try {
+    const query = 'DELETE FROM schedules WHERE id = ?';
+    await db.promise().query(query, [id]);
+    res.json({ success: true, message: 'Event deleted successfully' });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: 'Database error' });
+  }
 });
+
 app.get('/api/dashboard/upcoming', isAuthenticated, async (req, res) => {
   const userRole = req.session.user.role;
 
   try {
       const query = `
-          SELECT title, start_date, end_date 
-          FROM schedules 
+          SELECT id, title, start_date, end_date, type, instructor, location, description
+          FROM schedules
           WHERE (target_role = ? OR target_role = 'all')
           AND start_date BETWEEN NOW() AND DATE_ADD(NOW(), INTERVAL 7 DAY)
           ORDER BY start_date ASC

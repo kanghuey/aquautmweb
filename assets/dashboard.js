@@ -12,7 +12,7 @@ function loadUpcomingEvents() {
         .then(res => res.json())
         .then(events => {
             const container = document.getElementById('dashboard-events-list');
-            
+
             if (events.length === 0) {
                 container.innerHTML = '<p>No events scheduled for this week.</p>';
                 return;
@@ -22,9 +22,9 @@ function loadUpcomingEvents() {
             events.forEach(event => {
                 const dateOptions = { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' };
                 const dateStr = new Date(event.start_date).toLocaleDateString('en-US', dateOptions);
-                
+
                 html += `
-                    <li style="margin-bottom: 10px; border-bottom: 1px solid #eee; padding-bottom: 5px;">
+                    <li style="margin-bottom: 10px; border-bottom: 1px solid #eee; padding-bottom: 5px; cursor: pointer;" onclick="showEventDetails(${event.id})">
                         <strong>${event.title}</strong><br>
                         <span style="font-size: 0.9em; color: #666;">${dateStr}</span>
                     </li>`;
@@ -153,6 +153,51 @@ function loadRecentLogs() {
         .catch(err => {
             console.error("Error loading recent logs:", err);
             document.getElementById('recent-logs').innerHTML = '<li>Error loading activity.</li>';
+        });
+}
+
+function showEventDetails(eventId) {
+    fetch(`/api/events/${eventId}`)
+        .then(res => res.json())
+        .then(event => {
+            if (event.error) {
+                alert('Error loading event details: ' + event.error);
+                return;
+            }
+
+            const startDate = new Date(event.start).toLocaleDateString();
+            const startTime = new Date(event.start).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+            const endDate = event.end ? new Date(event.end).toLocaleDateString() : null;
+            const endTime = event.end ? new Date(event.end).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) : null;
+
+            let details = `${event.title}\n\n`;
+            details += `Date: ${startDate}\n`;
+            details += `Time: ${startTime}`;
+            if (endTime) {
+                details += ` - ${endTime}`;
+            }
+            details += '\n';
+
+            if (event.extendedProps && event.extendedProps.type === 'class') {
+                details += '\nType: Class\n';
+                if (event.extendedProps.instructor) {
+                    details += `Instructor: ${event.extendedProps.instructor}\n`;
+                }
+                if (event.extendedProps.location) {
+                    details += `Location: ${event.extendedProps.location}\n`;
+                }
+                if (event.extendedProps.description) {
+                    details += `Description: ${event.extendedProps.description}\n`;
+                }
+            } else {
+                details += '\nType: Event\n';
+            }
+
+            alert(details);
+        })
+        .catch(err => {
+            console.error('Error fetching event details:', err);
+            alert('Error loading event details.');
         });
 }
 
