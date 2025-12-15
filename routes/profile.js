@@ -34,7 +34,7 @@ const upload = multer({
   }
 });
 
-router.get("/profile", async (req, res) => {
+router.get("/", async (req, res) => {
   if (!req.session.user || !req.session.user.id) {
     return res.status(401).json({ error: "Not logged in" });
   }
@@ -62,7 +62,7 @@ router.get("/profile", async (req, res) => {
 });
 
 // Update profile information
-router.put("/profile", async (req, res) => {
+router.put("/", async (req, res) => {
   if (!req.session.user || !req.session.user.id) {
     return res.status(401).json({ error: "Not logged in" });
   }
@@ -95,7 +95,7 @@ router.put("/profile", async (req, res) => {
 });
 
 // Change password
-router.put("/profile/password", async (req, res) => {
+router.put("/password", async (req, res) => {
   if (!req.session.user || !req.session.user.id) {
     return res.status(401).json({ error: "Not logged in" });
   }
@@ -133,7 +133,7 @@ router.put("/profile/password", async (req, res) => {
 });
 
 // Upload profile picture
-router.post("/profile/picture", upload.single("profile_pic"), async (req, res) => {
+router.post("/picture", upload.single("profile_pic"), async (req, res) => {
   if (!req.session.user || !req.session.user.id) {
     return res.status(401).json({ error: "Not logged in" });
   }
@@ -173,7 +173,7 @@ router.post("/profile/picture", upload.single("profile_pic"), async (req, res) =
 });
 
 // Toggle 2FA
-router.put("/profile/2fa", async (req, res) => {
+router.put("/2fa", async (req, res) => {
   if (!req.session.user || !req.session.user.id) {
     return res.status(401).json({ error: "Not logged in" });
   }
@@ -196,7 +196,7 @@ router.put("/profile/2fa", async (req, res) => {
 });
 
 // Toggle notifications
-router.put("/profile/notifications", async (req, res) => {
+router.put("/notifications", async (req, res) => {
   if (!req.session.user || !req.session.user.id) {
     return res.status(401).json({ error: "Not logged in" });
   }
