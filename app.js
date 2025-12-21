@@ -383,6 +383,7 @@ const authRouter = require("./routes/auth");
 const profileRoutes = require("./routes/profile");
 const announcementRoutes = require("./routes/announcements");
 const tournamentRoutes = require("./routes/tournaments");
+const chatbotRoutes = require("./routes/chatbot");
 
 app.use(announcementRoutes);
 app.use("/", pagesRouter);
@@ -390,7 +391,7 @@ app.use("/", authRouter);
 app.use("/", pagesRouter);
 app.use("/", authRouter);
 app.use("/profile", profileRoutes);
-
+app.use("/api/chatbot", chatbotRoutes);
 
 app.use("/api/tournaments", tournamentRoutes);
 
