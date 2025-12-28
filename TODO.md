@@ -1,6 +1,9 @@
-# TODO: Enable 2FA for All Users on Login
+# TODO: Convert AI Chatbot to Floating Widget in Athlete and Member Dashboards
 
-- [x] Modify routes/auth.js to always require 2FA on login (remove twofa_enabled check)
-- [x] Create sql script/enable_2fa_all_users.sql to set twofa_enabled=TRUE for all users
-- [x] Execute the SQL script to update the database
-- [x ] Test login functionality to confirm 2FA is always required
+## Tasks
+- [x] Update chatbot.js to handle floating widget toggle and close functionality
+- [x] Remove chatbot section from athlete-dashboard.html main content
+- [x] Add floating chatbot widget to athlete-dashboard.html
+- [x] Remove chatbot section from member-dashboard.html main content
+- [x] Add floating chatbot widget to member-dashboard.html
+- [x] Test floating widget integration in both dashboards

@@ -8,9 +8,12 @@ CREATE TABLE IF NOT EXISTS users (
     last_name VARCHAR(100) NOT NULL,
     email VARCHAR(255) UNIQUE NOT NULL,
     password VARCHAR(255) NOT NULL,
+    role ENUM('admin', 'member', 'athlete', 'guest') DEFAULT 'member',
+    profile_pic VARCHAR(255) DEFAULT '/images/default-profile.png',
+    notifications_enabled BOOLEAN DEFAULT TRUE,
     twofa_enabled BOOLEAN DEFAULT FALSE,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-    
+
 );
 
 -- Create login_logs table
@@ -56,7 +59,7 @@ CREATE TABLE IF NOT EXISTS verification_codes (
     FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
 );
 
--- Example evens
+-- Example events
 INSERT INTO events (title, description, event_date, event_time, location) VALUES
 (
     'Swimming Competition - December 2023',
@@ -82,4 +85,43 @@ CREATE TABLE announcements (
   created_by INT,
   FOREIGN KEY (created_by) REFERENCES users(id)
 );
+
+
+CREATE TABLE tournaments (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(255) NOT NULL,
+    date DATE NOT NULL,
+    venue VARCHAR(255) NOT NULL,
+    is_active BOOLEAN DEFAULT TRUE,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+);
+
+
+CREATE TABLE tournament_registrations (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    tournament_id INT NOT NULL,
+    athlete_id INT NOT NULL,
+    category VARCHAR(100) NOT NULL,
+    gender ENUM('Male','Female','Other') NOT NULL,
+    status ENUM('pending','approved','rejected') DEFAULT 'pending',
+    registered_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+
+    UNIQUE KEY unique_registration (tournament_id, athlete_id),
+    FOREIGN KEY (tournament_id) REFERENCES tournaments(id) ON DELETE CASCADE
+);
+
+
+CREATE TABLE registration_events (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    registration_id INT NOT NULL,
+    event_name VARCHAR(100) NOT NULL,
+
+    CONSTRAINT fk_registration_events
+        FOREIGN KEY (registration_id)
+        REFERENCES tournament_registrations(id)
+        ON DELETE CASCADE
+);
+
+
 

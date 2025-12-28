@@ -39,6 +39,12 @@
                         <span class="menu-label">Schedule</span>
                     </a>
                 </li>
+                <li class="menu-item">
+                    <a href="#" class="menu-link">
+                        <span class="menu-icon material-symbols-rounded">emoji_events</span>
+                        <span class="menu-label">Tournaments</span>
+                    </a>
+                </li>
             </ul>
 
             <ul class="menu-list secondary-menu">
@@ -63,50 +69,268 @@
 
     <main class="main-content">
         <section class="section active" id="dashboard">
-            <h1>Welcome to AquaUTM, Athlete</h1>
-            <p>Your personalized space for announcements, schedules, and club management.</p>
+            <h1>Welcome to AquaUTM, <span id="dynamic-user-name">User</span>!</h1>
+            <p class="dashboard-subtitle">Your personalized space for club announcements and schedules.</p><br>
             <div class="card-grid">
                 <div class="card">
-                    <h3>Placeholder</h3>
-                    <p>Placeholder</p>
+                    <h3>Upcoming Events</h3>
+                    <div id="dashboard-events-list">
+                        <p>Loading...</p>
+                    </div>
                 </div>
                 <div class="card">
-                    <h3>Placeholder</h3>
-                    <p>Placeholder</p>
+                    <h3>Latest Announcement</h3>
+                    <div id="dashboard-announcement-content">
+                        <p>Loading...</p>
+                    </div>
                 </div>
             </div>
         </section>
-    
-        <section id="announcements">
+
+        <section class="section" id="announcements">
             <h1>Announcements</h1>
+            <p class="dashboard-subtitle">Latest news and announcements.</p>
             <div id="announcements-list"></div>
         </section>
 
-
-
-    
         <section class="section" id="schedule">
-            <h1>Training Schedule</h1>
-            <div class="card schedule-card">
-                <h3>Upcoming Events</h3>
-            </div>
+            <h1>Training Schedule and Event Viewer</h1>
+            <p class="dashboard-subtitle">Check the upcoming events.</p>
             <div id="calendar"></div>
+        </section>
+
+        <section class="section" id="tournaments">
+            <h1>Tournament Registration</h1>
+            <p class="dashboard-subtitle">Select an available tournament to register.</p>
+
+            <div class="card">
+                <h3>Register for Event</h3>
+                <form id="athlete-registration-form">
+
+                    <div class="form-group mb-3">
+                        <label>Select Tournament<span class="required">*</span></label>
+                        <select class="form-control" id="tournament-select" name="tournament_id" required>
+                            <option value="" disabled selected>Loading available tournaments...</option>
+                        </select>
+                    </div>
+
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label>Category</label>
+                            <select class="form-control" name="category" required>
+                                <option value="example1">Example 1</option>
+                                <option value="example2">Example 2</option>
+                                <option value="Open">Open Category</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Gender</label>
+                            <select class="form-control" name="gender" required>
+                                <option value="Male">Male</option>
+                                <option value="Female">Female</option>
+                            </select>
+                        </div>
+
+                        <!-- Example data! Consult Nicholas or stakeholder for proper data -->
+
+                        <div class="form-group full-width">
+                            <label>Select Events (Hold Ctrl to select multiple)</label>
+                            <select class="form-control" name="event_name" multiple required style="height: 120px;">
+                                <option value="50m Freestyle">50m Freestyle</option>
+                                <option value="100m Freestyle">100m Freestyle</option>
+                                <option value="50m Breaststroke">50m Breaststroke</option>
+                                <option value="100m Backstroke">100m Backstroke</option>
+                                <option value="200m Medley">200m Medley</option>
+                                <option value="4x100m Relay">4x100m Relay</option>
+                            </select>
+                        </div>
+
+                    </div>
+
+                    <div class="form-group">
+                        <label>Contact Email<span class="required">*</span></label>
+                        <input type="email" class="form-control" name="contact_email"
+                            placeholder="e.g. athlete@email.com" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Contact Phone Number<span class="required">*</span></label>
+                        <input type="tel" class="form-control" name="contact_phone" placeholder="e.g. +60123456789"
+                            required pattern="^[0-9+\s()-]{7,20}$" title="Enter a valid phone number">
+                    </div>
+                    <div class="form-group">
+                        <label>Full Name<span class="required">*</span></label>
+                        <input type="text" class="form-control" name="contact_name" placeholder="e.g. Rahul Kumar"
+                            required minlength="2">
+                    </div>
+
+
+                    <div class="form-group full-width">
+                        <label>Seed Time (Personal Best) <span class="required">*</span></label>
+                        <input type="text" class="form-control" name="seed_time" placeholder="e.g. 00:58.12" required
+                            pattern="^([0-9]+):([0-5][0-9])\.([0-9]{2})$"
+                            title="Enter time as M:SS.xx or MM:SS.xx (e.g. 0:58.12 or 1:02.45)">
+                        <small class="form-text">
+                            Format: minutes:seconds.hundredths (example: 1:02.45)
+                        </small>
+                    </div>
+
+                    <button type="submit" class="mt-3">Submit Registration</button>
+                </form>
+            </div>
+
+            <div class="card recent-card">
+                <h3>My Registration History</h3>
+                <ul id="my-history-list" class="recent-list">
+                    <li>Loading history...</li>
+                </ul>
+            </div>
         </section>
 
         <!--profile page-->
         <section class="section" id="profile">
             <h1>Profile</h1>
+            <p class="dashboard-subtitle">Edit your profile information.</p><br>
 
-            <!-- data will be fetched from db chack profile.js in assets for working-->
-            <div class="card" id="profile-card"></div>
+            <div class="profile-grid">
+                <div class="card profile-left">
+
+                    <div class="card-header">
+                        <h3 class="mb-0">Profile</h3>
+                    </div>
+
+                    <img id="profile-img" class="profile-image-lg">
+
+                    <p class="mt-4 mb-2 upload-label">Upload New Profile Picture:</p>
+
+                    <form id="profile-pic-form" enctype="multipart/form-data" class="upload-form">
+                        <div class="mb-3 d-flex justify-content-center">
+                            <input type="file" id="profile_pic" name="profile_pic" class="form-control w-75"
+                                accept="image/*" required>
+                        </div>
+
+                        <button type="submit" class="btn btn-success upload-btn">
+                            Upload Picture
+                        </button>
+                    </form>
+
+                    <p id="pic-message" class="status-msg"></p>
+
+                    <!-- data will be fetched from db check profile.js in assets for working-->
+                    <div id="profile-card"></div>
+
+                    <div class="profile-settings-group">
+
+                        <div class="setting-row">
+                            <span class="setting-label">Two-Factor Authentication</span>
+                            <label class="switch">
+                                <input type="checkbox" id="twofa-toggle">
+                                <span class="slider round"></span>
+                            </label>
+                        </div>
+
+                        <div class="setting-row">
+                            <span class="setting-label">Notifications</span>
+                            <label class="switch">
+                                <input type="checkbox" id="notifications-toggle">
+                                <span class="slider round"></span>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="profile-right">
+                    <div class="card mb-4">
+                        <h3>Update Profile Information</h3>
+
+                        <form id="update-profile-form">
+                            <label>Name</label>
+                            <input type="text" id="name" name="name" required>
+
+                            <label>Email</label>
+                            <input type="email" id="email" name="email" required>
+
+                            <button type="submit">Update Profile</button>
+                        </form>
+
+                        <p id="profile-message"></p>
+                    </div>
+
+                    <div class="card">
+                        <h3>Change Password</h3>
+
+                        <form id="password-form">
+                            <label>Current Password</label>
+                            <input type="password" id="current_password" required>
+
+                            <label>New Password</label>
+                            <input type="password" id="new_password" required>
+
+                            <label>Confirm Password</label>
+                            <input type="password" id="confirm_password" required>
+
+                            <button type="submit">Change Password</button>
+                        </form>
+
+                        <p id="password-message"></p>
+                    </div>
+
+                </div>
+
+            </div>
         </section>
     </main>
 
     <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.19/index.global.min.js"></script>
+    <script src="/assets/dashboard.js"></script>
     <script src="/assets/calendar.js"></script>
     <script src="/assets/sidebar.js"></script>
     <script src="/assets/profile.js"></script>
     <script src="/assets/announcements.js"></script>
+    <script src="/assets/tournaments.js"></script>
+    <script src="/assets/chatbot.js"></script>
+
+    <!-- Floating Chatbot Widget -->
+    <div id="chatbot-widget" class="chatbot-widget minimized">
+        <div class="chatbot-header">
+            <span class="chatbot-title">AI Assistant</span>
+            <button id="chatbot-toggle" class="chatbot-toggle">
+                <span class="material-symbols-rounded">chat</span>
+            </button>
+            <button id="chatbot-close" class="chatbot-close">
+                <span class="material-symbols-rounded">close</span>
+            </button>
+        </div>
+        <div class="chatbot-body">
+            <div class="chat-messages" id="chatMessages">
+                <div class="message bot">
+                    Hello! I'm your AquaUTM assistant. I can help you learn about our swimming pool management system.
+                    What would you like to know?
+                </div>
+            </div>
+            <div class="chat-input-area">
+                <div class="quick-questions" id="quickQuestions">
+                    <button class="quick-question" onclick="askQuestion('What is AquaUTM?')">What is AquaUTM?</button>
+                    <button class="quick-question" onclick="askQuestion('How do I login?')">How do I login?</button>
+                    <button class="quick-question" onclick="askQuestion('What are the user roles?')">User roles</button>
+                    <button class="quick-question"
+                        onclick="askQuestion('How do I register for tournaments?')">Tournaments</button>
+                    <button class="quick-question" onclick="askQuestion('How do I update my profile?')">Profile
+                        settings</button>
+                </div>
+                <div class="chat-input-container">
+                    <input type="text" id="chatInput" class="chat-input" placeholder="Ask me about AquaUTM..."
+                        onkeypress="handleKeyPress(event)">
+                    <button id="sendButton" class="send-button" onclick="sendMessage()">Send</button>
+                </div>
+            </div>
+            <div class="typing-indicator" id="typingIndicator">
+                <span></span><span></span><span></span>
+            </div>
+        </div>
+    </div>
+
 </body>
 
 </html>
